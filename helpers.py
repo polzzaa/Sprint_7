@@ -1,8 +1,24 @@
 import allure
 import requests
-import random
 import string
+import random
 from urls import MAIN_URL, LOGIN_COURIER, CREATE_COURIER
+
+@allure.title('Создание курьера')
+def create_courier(payload):
+    return requests.post(MAIN_URL + CREATE_COURIER, data=payload)
+
+
+@allure.title('Удаление курьера')
+def delete_courier(payload):
+    response = requests.post(MAIN_URL + LOGIN_COURIER, data=payload)
+    id_courier = response.json()["id"]
+    requests.delete(f'{MAIN_URL}{CREATE_COURIER}/{id_courier}')
+
+
+@allure.title('Авторизация курьера')
+def sigh_in_courier(payload):
+    return requests.post(MAIN_URL + LOGIN_COURIER, data=payload)
 
 
 @allure.title('Генерирование данных для курьера')
@@ -22,18 +38,3 @@ def generate_data_for_new_courier():
         "firstName": first_name
     }
     return payload
-
-
-@allure.title('Удаление курьера')
-def delete_courier(payload):
-    response = requests.post(MAIN_URL + LOGIN_COURIER, data=payload)
-    id_courier = response.json()["id"]
-    requests.delete(f'{MAIN_URL}{CREATE_COURIER}/{id_courier}')
-
-
-@allure.title('Создание курьера')
-def create_courier(payload):
-    return requests.post(MAIN_URL + CREATE_COURIER, data=payload)
-
-def sigh_in_courier(payload):
-    return requests.post(MAIN_URL + LOGIN_COURIER, data=payload)
